@@ -1,0 +1,73 @@
+<html>
+<title>AtCoder Rating Estimator</title>
+<body>
+<script language="javascript">
+function bigf(n) {
+	var num = 1.0;
+	var den = 1.0;
+	for (var i = 0; i < n; ++i) {
+		num *= 0.81;
+		den *= 0.9;
+	}
+	num = (1 - num) * 0.81 / 0.19;
+	den = (1 - den) * 0.9 / 0.1;
+	return Math.sqrt(num) / den;
+}
+
+function f(n) {
+	var finf = bigf(400);
+	return (bigf(n) - finf) / (bigf(1) - finf) * 1200.0;
+}
+
+function calc_rating(arr) {
+	var n = arr.length;
+	var num = 0.0;
+	var den = 0.0;
+	for (var i = n - 1; i >= 0; --i) {
+		num *= 0.9;
+		num += 0.9 * Math.pow(2, arr[i] / 800.0);
+		den *= 0.9;
+		den += 0.9;
+	}
+	var rating = Math.log2(num / den) * 800.0;
+	rating -= f(n);
+	return rating;
+}
+
+function calc(arr, goal_rating) {
+	// binary search
+	var lo = 0.0;
+	var hi = 5000.0;
+	for (var i = 0; i < 100; ++i) {
+		var mid = (hi + lo) / 2;
+		var r = calc_rating([mid].concat(arr));
+		if (r >= goal_rating) {
+			hi = mid;
+		} else {
+			lo = mid;
+		}
+	}
+	return hi;
+}
+
+function calculatePerformance() {
+	var past_perf = document.getElementById("past_performances").value;
+	var arr = past_perf.split(/\r\n|\r|\n/);
+	for (var i = 0; i < arr.length; ++i) {
+		arr[i] = parseInt(arr[i], 10);
+	}
+	var goal_rating = document.getElementById("goal_rating").value;
+	goal_rating = parseInt(goal_rating, 10);
+	document.getElementById("goal_performance").textContent = 
+		calc(arr, goal_rating).toString();
+}
+</script>
+
+<p>過去のパフォーマンス(1行に1個ずつ)
+<textarea id="past_performances" cols="6" rows="20"></textarea></p>
+<p>目標レーティング<input type="text" id="goal_rating"></p>
+<p>必要なパフォーマンス<div id="goal_performance">5000兆</div><p>
+<button id="calculate" onclick="calculatePerformance();">計算する</button>
+
+</body>
+</html> 
