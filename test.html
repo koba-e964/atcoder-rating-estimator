@@ -1,6 +1,7 @@
 <html>
 <title>AtCoder Rating Estimator</title>
 <body>
+<script language="javascript" src="atcoder_rating.js"></script>
 <script language="javascript">
 
 function calc(arr, goal_rating) {
@@ -21,9 +22,14 @@ function calc(arr, goal_rating) {
 
 function calculatePerformance() {
 	var past_perf = document.getElementById("past_performances").value;
-	var arr = past_perf.split(/\r\n|\r|\n/);
-	for (var i = 0; i < arr.length; ++i) {
-		arr[i] = parseInt(arr[i], 10);
+	var arr = [];
+	if (past_perf == "") {
+		arr = [];
+	} else {
+		arr = past_perf.split(/\r\n|\r|\n/);
+		for (var i = 0; i < arr.length; ++i) {
+			arr[i] = parseInt(arr[i], 10);
+		}
 	}
 	var goal_rating = document.getElementById("goal_rating").value;
 	goal_rating = parseInt(goal_rating, 10);

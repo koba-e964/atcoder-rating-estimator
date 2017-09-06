@@ -4,6 +4,9 @@
 <script language="javascript" src="atcoder_rating.js"></script>
 <script language="javascript">
 function calc(last, n, goal_rating) {
+	if (n == 0) {
+		return goal_rating + 1200.0; // corner case
+	}
 	// binary search
 	var lo = 0.0;
 	var hi = 10000.0;
