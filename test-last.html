@@ -1,41 +1,15 @@
 <html>
 <title>AtCoder Rating Estimator</title>
 <body>
+<script language="javascript" src="atcoder_rating.js"></script>
 <script language="javascript">
-function bigf(n) {
-	var num = 1.0;
-	var den = 1.0;
-	for (var i = 0; i < n; ++i) {
-		num *= 0.81;
-		den *= 0.9;
-	}
-	num = (1 - num) * 0.81 / 0.19;
-	den = (1 - den) * 0.9 / 0.1;
-	return Math.sqrt(num) / den;
-}
-
-function f(n) {
-	var finf = bigf(400);
-	return (bigf(n) - finf) / (bigf(1) - finf) * 1200.0;
-}
-
-function calc_rating(last, perf, n) {
-	last += f(n);
-	var wei = 9 - 9 * 0.9 ** n;
-	var num = wei * (2 ** (last / 800.0)) + 2 ** (perf / 800.0) ;
-	var den = 1 + wei;
-	var rating = Math.log2(num / den) * 800.0;
-	rating -= f(n + 1);
-	return rating;
-}
-
 function calc(last, n, goal_rating) {
 	// binary search
 	var lo = 0.0;
-	var hi = 5000.0;
+	var hi = 10000.0;
 	for (var i = 0; i < 100; ++i) {
 		var mid = (hi + lo) / 2;
-		var r = calc_rating(last, mid, n);
+		var r = calc_rating_from_last(last, mid, n);
 		if (r >= goal_rating) {
 			hi = mid;
 		} else {
@@ -43,6 +17,12 @@ function calc(last, n, goal_rating) {
 		}
 	}
 	return hi;
+}
+
+function keydown_enter() {
+    if(window.event.keyCode == 13) {
+        document.getElementById("calculate").click();
+    }
 }
 
 function calculatePerformance() {
@@ -57,12 +37,12 @@ function calculatePerformance() {
 }
 </script>
 
-<p>直前のレート
-<textarea id="last_rating" cols="6" rows="1"></textarea></p>
-<p>これまでの参加回数<input type="text" id="num_rated"></p>
-<p>目標レーティング<input type="text" id="goal_rating"></p>
+<p>直前のレート<input type="text" id="last_rating" onkeydown="keydown_enter();"></p>
+<p>これまでの参加回数<input type="text" id="num_rated" onkeydown="keydown_enter();"></p>
+<p>目標レーティング<input type="text" id="goal_rating" onkeydown="keydown_enter();"></p>
 <p>必要なパフォーマンス<div id="goal_performance">5000兆</div><p>
-<button id="calculate" onclick="calculatePerformance();">計算する</button>
+<button type="submit" id="calculate" onclick="calculatePerformance();">計算する</button>
+</p>
 
 </body>
 </html> 
