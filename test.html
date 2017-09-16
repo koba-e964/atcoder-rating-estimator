@@ -21,6 +21,13 @@ function calc(arr, goal_rating) {
 	return hi;
 }
 
+function keydown_enter() {
+    if(window.event.keyCode == 13) {
+        document.getElementById("calculate").click();
+    }
+}
+
+
 function calculatePerformance() {
 	var past_perf = document.getElementById("past_performances").value;
 	var arr = [];
@@ -41,7 +48,7 @@ function calculatePerformance() {
 
 <p>過去のパフォーマンス(1行に1個ずつ、新しいのが上)
 <textarea id="past_performances" cols="6" rows="20"></textarea></p>
-<p>目標レーティング<input type="text" id="goal_rating"></p>
+<p>目標レーティング<input type="text" id="goal_rating" onkeydown="keydown_enter();"></p>
 <p>必要なパフォーマンス<div id="goal_performance">5000兆</div><p>
 <button id="calculate" onclick="calculatePerformance();">計算する</button>
 

@@ -41,13 +41,23 @@ function calculatePerformance() {
 		calc(last_rating, n, goal_rating).toString();
 }
 </script>
-
-<p>直前のレート<input type="text" id="last_rating" onkeydown="keydown_enter();"></p>
+<h1>AtCoder Rating Estimator</h1>
+<p>現在のレート<input type="text" id="last_rating" onkeydown="keydown_enter();"></p>
 <p>これまでの参加回数<input type="text" id="num_rated" onkeydown="keydown_enter();"></p>
 <p>目標レーティング<input type="text" id="goal_rating" onkeydown="keydown_enter();"></p>
-<p>必要なパフォーマンス<div id="goal_performance">5000兆</div><p>
+<p>必要なパフォーマンス<div id="goal_performance">5000兆</div>
 <button type="submit" id="calculate" onclick="calculatePerformance();">計算する</button>
 </p>
 
+<div>
+	<h1>使い方</h1>
+	AtCoderでの現在のレート、これまでの参加回数、目標レーティングを入力すると、それを次回のコンテストで実現するために必要なパフォーマンスを計算します。
+	<h2>注意</h2>
+	数学的には、コンテスト後のレーティングは(1)コンテスト前のレーティング (2)コンテストの参加回数 (3)コンテストでのパフォーマンス の3個のみによって決まり、今までのパフォーマンスの履歴は関係ありません(証明してみよう!)が、実際は丸め誤差が多少入ることになります。
+	レーティング400以上ならこの誤差は最大で3程度ですが、レーティング400未満の場合はもっと大きな誤差が出ます。誤差が気になる場合は<a href="./test.html">コンテストの履歴を使用して計算する正確な方</a>を使いましょう。
+</div>
+<div>
+作者: koba-e964 (Twitter: <a href="https://twitter.com/kobae964">@kobae964</a>)
+</div>
 </body>
 </html> 
