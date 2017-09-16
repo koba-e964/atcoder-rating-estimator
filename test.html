@@ -6,8 +6,9 @@
 
 function calc(arr, goal_rating) {
 	// binary search
-	var lo = 0.0;
-	var hi = 5000.0;
+	goal_rating = unpositivize_rating(goal_rating)
+	var lo = -10000.0;
+	var hi = 10000.0;
 	for (var i = 0; i < 100; ++i) {
 		var mid = (hi + lo) / 2;
 		var r = calc_rating([mid].concat(arr));

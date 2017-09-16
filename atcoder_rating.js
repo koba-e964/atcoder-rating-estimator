@@ -15,6 +15,7 @@ function f(n) {
     return (bigf(n) - finf) / (bigf(1) - finf) * 1200.0;
 }
 
+// Returns unpositivized ratings.
 function calc_rating(arr) {
     var n = arr.length;
     var num = 0.0;
@@ -30,6 +31,7 @@ function calc_rating(arr) {
     return rating;
 }
 
+// Takes and returns unpositivized ratings.
 function calc_rating_from_last(last, perf, n) {
     last += f(n);
     var wei = 9 - 9 * 0.9 ** n;
@@ -40,5 +42,18 @@ function calc_rating_from_last(last, perf, n) {
     return rating;
 }
 
+// (-inf, inf) -> (0, inf)
+function positivize_rating(r) {
+    if (r >= 400.0) {
+	return r;
+    }
+    return 400.0 * Math.exp((r - 400.0) / 400.0);
+}
 
-
+// (0, inf) -> (-inf, inf)
+function unpositivize_rating(r) {
+    if (r >= 400.0) {
+	return r;
+    }
+    return 400.0 + 400.0 * Math.log(r / 400.0);
+}
