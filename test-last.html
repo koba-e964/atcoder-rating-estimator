@@ -39,12 +39,26 @@ function calculatePerformance() {
 	goal_rating = parseInt(goal_rating, 10);
 	document.getElementById("goal_performance").textContent = 
 		calc(last_rating, n, goal_rating).toString();
+	document.getElementById("delta_last_rating").textContent =
+		(-f(n)).toString();
+	document.getElementById("delta_goal_rating").textContent =
+		(-f(n + 1)).toString();
+	document.getElementById("raw_last_rating").textContent =
+		(last_rating + f(n)).toString();
+	document.getElementById("raw_goal_rating").textContent =
+		(goal_rating + f(n + 1)).toString();
 }
 </script>
 <h1>AtCoder Rating Estimator</h1>
-<p>現在のレート<input type="text" id="last_rating" onkeydown="keydown_enter();"></p>
+<p>現在のレート<input type="text" id="last_rating" onkeydown="keydown_enter();">
+	補正: <span id="delta_last_rating">???</span>
+	補正前: <span id="raw_last_rating">???</span>
+</p>
 <p>これまでの参加回数<input type="text" id="num_rated" onkeydown="keydown_enter();"></p>
-<p>目標レーティング<input type="text" id="goal_rating" onkeydown="keydown_enter();"></p>
+<p>目標レーティング<input type="text" id="goal_rating" onkeydown="keydown_enter();">
+	補正: <span id="delta_goal_rating">???</span>
+	補正前: <span id="raw_goal_rating">???</span>
+</p>
 <p>必要なパフォーマンス<div id="goal_performance">5000兆</div>
 <button type="submit" id="calculate" onclick="calculatePerformance();">計算する</button>
 </p>
