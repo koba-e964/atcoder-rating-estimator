@@ -1,0 +1,112 @@
+<html>
+<title>AtCoder Rating Estimator</title>
+<body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script language="javascript" src="atcoder_rating.js"></script>
+<script language="javascript">
+
+function calc(arr, goal_rating) {
+	// binary search
+	goal_rating = unpositivize_rating(goal_rating)
+	var lo = -10000.0;
+	var hi = 10000.0;
+	for (var i = 0; i < 100; ++i) {
+		var mid = (hi + lo) / 2;
+		var r = calc_rating([mid].concat(arr));
+		if (r >= goal_rating) {
+			hi = mid;
+		} else {
+			lo = mid;
+		}
+	}
+	return hi;
+}
+
+function calculatePerformance() {
+	var handle = document.getElementById("handle").value;
+
+	var past_perf;
+	var call =  function() {
+		var url = "https://atcoder.jp/user/" + handle　+ "/history";
+		var xpath = '//*[@id="history"]';
+		var query = "select * from htmlstring where url = '" + url + "' and xpath = '" + xpath + "'";
+		var yql   = "https://query.yahooapis.com/v1/public/yql?format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&q=" + encodeURIComponent(query);
+		$.ajax(
+			{
+				type     : 'GET',
+				url      : yql,
+				dataType : 'json',
+				timeout  : 10000,
+				cache    : false,
+			}).done(function(data){
+				console.log(data);
+				document.getElementById("test").innerHTML = data.query.results.result;
+
+				var table = document.getElementById("history");
+				var arr = [];
+				for (var i = 0; i < table.rows.length; i++) {
+					var str = table.rows[i].cells[3].firstChild.data;
+					if (!isNaN(str)) {
+						arr.push(parseInt(str, 10));
+					}
+				}
+
+				var goal_rating = document.getElementById("goal_rating").value;
+				goal_rating = parseInt(goal_rating, 10);
+
+				var goal_performance = calc(arr, goal_rating).toString();
+				document.getElementById("goal_performance").textContent = goal_performance;
+
+				document.getElementById("test").innerHTML = "";
+
+				var tweet = "";
+				tweet += "AtCoderのハンドルネーム: " + handle + "\n";
+				tweet += "目標レーティング: " + goal_rating + "\n";
+				tweet += "必要なパフォーマンス: " + goal_performance + "\n";
+				$.fn.appendTweetButton = function(url, text){
+					$(this).append($("<a href=\"https://twitter.com/share\" class=\"twitter-share-button\" data-url=\""+url+"\" data-text=\""+text+"\" data-count=\"vertical\">Tweet<\/a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');<\/script>"));
+				}
+				$("body").appendTweetButton($(location).attr('href'), tweet);
+			}).fail(function(data){
+				alert("Failed");
+			});
+		};
+	call();
+}
+
+$(document).ready(function(){
+	var result = {};
+	if(1 < window.location.search.length) {
+		var query = window.location.search.substring(1);
+		var parameters = query.split('&');
+		for(var i = 0; i < parameters.length; i++) {
+			var element = parameters[i].split('=');
+			var paramName  = decodeURIComponent(element[0]);
+			var paramValue = decodeURIComponent(element[1]);
+			result[paramName] = paramValue;
+		}
+	}
+	if(result["handle"]){
+		document.wrapper.handle.value = result["handle"];
+	}
+	if(result["goal_rating"]){
+		document.wrapper.goal_rating.value = result["goal_rating"];
+	}
+	if(result["handle"] && result["goal_rating"]){
+		calculatePerformance();
+	}
+});
+
+</script>
+
+<form action="./test-handle.html" method="get" name="wrapper">
+<p>AtCoderのハンドルネーム：<input type="text" id="handle" name="handle"> </p>
+<p>目標レーティング：<input type="text" id="goal_rating" name="goal_rating"></p>
+<p>必要なパフォーマンス：<a id="goal_performance">5000兆</a><p>
+<input type="submit" id="calculate" value="計算する">
+</form>
+
+<div id="test"/>
+
+</body>
+</html>
