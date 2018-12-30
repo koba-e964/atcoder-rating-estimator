@@ -27,7 +27,7 @@ function calculatePerformance() {
 
 	var past_perf;
 	var call =  function() {
-		var url = "https://atcoder.jp/user/" + handle　+ "/history";
+		var url = "https://atcoder.jp/users/" + handle + "/history";
 		var xpath = '//*[@id="history"]';
 		var query = "select * from htmlstring where url = '" + url + "' and xpath = '" + xpath + "'";
 		var yql   = "https://query.yahooapis.com/v1/public/yql?format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&q=" + encodeURIComponent(query);
