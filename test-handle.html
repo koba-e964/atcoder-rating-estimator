@@ -5,6 +5,7 @@
 <script language="javascript" src="atcoder_rating.js"></script>
 <script language="javascript">
 
+// In arr, recent performances come forward.
 function calc(arr, goal_rating) {
 	// binary search
 	goal_rating = unpositivize_rating(goal_rating)
@@ -22,6 +23,7 @@ function calc(arr, goal_rating) {
 	return hi;
 }
 
+// In arr, recent performances come forward.
 function calculatePerformance() {
 	var handle = document.getElementById("handle").value;
 
@@ -43,6 +45,7 @@ function calculatePerformance() {
 				document.getElementById("test").innerHTML = data.query.results.result;
 
 				var table = document.getElementById("history");
+				console.log(table);
 				var arr = [];
 				for (var i = 0; i < table.rows.length; i++) {
 					var str = table.rows[i].cells[3].firstChild.data;
@@ -50,7 +53,8 @@ function calculatePerformance() {
 						arr.push(parseInt(str, 10));
 					}
 				}
-
+				// As of Dec 31 2018, arr is passed in oldest-first manner. Gotta reverse it
+				arr.reverse();
 				var goal_rating = document.getElementById("goal_rating").value;
 				goal_rating = parseInt(goal_rating, 10);
 
