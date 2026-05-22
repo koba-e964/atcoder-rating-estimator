@@ -1,56 +1,73 @@
 <html>
-<title>AtCoder Rating Estimator</title>
-<body>
-<script language="javascript" src="atcoder_rating.js"></script>
-<script language="javascript">
+    <title>AtCoder Rating Estimator</title>
+    <body>
+        <script language="javascript" src="atcoder_rating.js"></script>
+        <script language="javascript">
+            function calc(arr, goal_rating) {
+                // binary search
+                goal_rating = unpositivize_rating(goal_rating);
+                var lo = -10000.0;
+                var hi = 10000.0;
+                for (var i = 0; i < 100; ++i) {
+                    var mid = (hi + lo) / 2;
+                    var r = calc_rating([mid].concat(arr));
+                    if (r >= goal_rating) {
+                        hi = mid;
+                    } else {
+                        lo = mid;
+                    }
+                }
+                return hi;
+            }
 
-function calc(arr, goal_rating) {
-	// binary search
-	goal_rating = unpositivize_rating(goal_rating)
-	var lo = -10000.0;
-	var hi = 10000.0;
-	for (var i = 0; i < 100; ++i) {
-		var mid = (hi + lo) / 2;
-		var r = calc_rating([mid].concat(arr));
-		if (r >= goal_rating) {
-			hi = mid;
-		} else {
-			lo = mid;
-		}
-	}
-	return hi;
-}
+            function keydown_enter() {
+                if (window.event.keyCode == 13) {
+                    document.getElementById("calculate").click();
+                }
+            }
 
-function keydown_enter() {
-    if(window.event.keyCode == 13) {
-        document.getElementById("calculate").click();
-    }
-}
+            function calculatePerformance() {
+                var past_perf =
+                    document.getElementById("past_performances").value;
+                var arr = [];
+                if (past_perf == "") {
+                    arr = [];
+                } else {
+                    arr = past_perf.split(/\r\n|\r|\n/);
+                    for (var i = 0; i < arr.length; ++i) {
+                        arr[i] = parseInt(arr[i], 10);
+                    }
+                }
+                var goal_rating = document.getElementById("goal_rating").value;
+                goal_rating = parseInt(goal_rating, 10);
+                document.getElementById("goal_performance").textContent = calc(
+                    arr,
+                    goal_rating,
+                ).toString();
+            }
+        </script>
 
-
-function calculatePerformance() {
-	var past_perf = document.getElementById("past_performances").value;
-	var arr = [];
-	if (past_perf == "") {
-		arr = [];
-	} else {
-		arr = past_perf.split(/\r\n|\r|\n/);
-		for (var i = 0; i < arr.length; ++i) {
-			arr[i] = parseInt(arr[i], 10);
-		}
-	}
-	var goal_rating = document.getElementById("goal_rating").value;
-	goal_rating = parseInt(goal_rating, 10);
-	document.getElementById("goal_performance").textContent = 
-		calc(arr, goal_rating).toString();
-}
-</script>
-
-<p>過去のパフォーマンス(1行に1個ずつ、新しいのが上)
-<textarea id="past_performances" cols="6" rows="20"></textarea></p>
-<p>目標レーティング<input type="text" id="goal_rating" onkeydown="keydown_enter();"></p>
-<p>必要なパフォーマンス<div id="goal_performance">5000兆</div><p>
-<button id="calculate" onclick="calculatePerformance();">計算する</button>
-
-</body>
-</html> 
+        <p>
+            過去のパフォーマンス(1行に1個ずつ、新しいのが上)
+            <textarea id="past_performances" cols="6" rows="20"></textarea>
+        </p>
+        <p>
+            目標レーティング<input
+                type="text"
+                id="goal_rating"
+                onkeydown="keydown_enter()"
+            />
+        </p>
+        <p>必要なパフォーマンス</p>
+        <div id="goal_performance">5000兆</div>
+        <p>
+            <button id="calculate" onclick="calculatePerformance()">
+                計算する
+            </button>
+        </p>
+        <!-- admax -->
+        <script src="https://adm.shinobi.jp/s/7320abacdfcc97f8ce3fdd6ac52794b7"></script>
+        <script src="https://adm.shinobi.jp/s/cfc054e6a0b127e780e4a00fd0703071"></script>
+        <!-- admax -->
+    </body>
+</html>
